@@ -81,3 +81,15 @@ cd security/AuthKit.Pentest.Browser && npm ci && npx playwright install chromium
 # with the stack running from AuthKit.Net:
 AUTHKIT_PENTEST_URL=http://127.0.0.1:9999 AUTHKIT_PENTEST_ANON_KEY=... node run.mjs
 ```
+
+## Try it locally
+
+The demo needs Docker and the isolated Supabase stack from AuthKit.Net checked out next to this
+repository (`../AuthKit.Net`). Override the location with `AUTHKIT_NET_ROOT`.
+
+```bash
+bash scripts/poc-up.sh     # http://127.0.0.1:8088
+bash scripts/poc-down.sh
+```
+
+Sign up with any e-mail (confirmation is disabled in the stack) and a password of 8+ characters.
