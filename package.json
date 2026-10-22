@@ -7,7 +7,8 @@
     "build": "ng build authkit && ng build demo",
     "watch": "ng build --watch --configuration development",
     "test": "node scripts/run-tests.mjs",
-    "prebuild": "node scripts/sync-messages.mjs"
+    "prebuild": "node scripts/sync-messages.mjs",
+    "sync:contract": "node scripts/sync-contract.mjs"
   },
   "private": true,
   "packageManager": "npm@11.6.2",
@@ -31,8 +32,7 @@
     "ng-packagr": "^22.2.0",
     "prettier": "^3.8.1",
     "typescript": "~6.0.2",
-    "vitest": "^5.0.0",
-    "@authkit/contracts": "file:./vendor/authkit-contracts-0.1.0.tgz"
+    "vitest": "^5.0.0"
   },
   "description": "AuthKit for Angular: provider-agnostic authentication components, the Supabase provider and the Cl@ve server-driven adapter.",
   "repository": {

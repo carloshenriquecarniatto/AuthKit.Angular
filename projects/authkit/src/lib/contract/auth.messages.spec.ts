@@ -1,4 +1,4 @@
-import { AUTHKIT_CONTRACT } from '@authkit/contracts/testing';
+import { AUTHKIT_CONTRACT } from './auth.models';
 import {
   DictionaryAuthMessages,
   ENGLISH_AUTH_MESSAGES,

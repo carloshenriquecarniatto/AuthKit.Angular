@@ -19,7 +19,7 @@ const MIRRORED_ENTRIES = [
   'projects',
   'scripts',
   'samples',
-  'vendor',
+  'contracts',
   'node_modules',
 ];
 

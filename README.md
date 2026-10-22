@@ -4,7 +4,7 @@ Native Angular authentication components for AuthKit: standalone components, sig
 around `HttpClient`.
 
 ```bash
-npm install @authkit/angular @authkit/contracts
+npm install @authkit/angular
 ```
 
 This repository ships the Angular SDK only. The other platforms live in their own repositories:
@@ -48,7 +48,22 @@ bootstrapApplication(AppComponent, {
 - Guards are `CanActivateFn` and return a `UrlTree`, never call the router.
 - State is signals, not `BehaviorSubject`.
 - Federation UI is descriptor-driven: one control per declared method, no `switch` on a method id.
-- The contract comes from `@authkit/contracts`; a parity test fails the build if it drifts.
+- The contract is a committed copy of `contracts/authkit.contract.json`; a parity test and a CI
+  drift check fail the build if it diverges from `AuthKit.Net`.
+
+## The contract
+
+`contracts/authkit.contract.json` is copied from
+[AuthKit.Net](https://github.com/carloshenriquecarniatto/AuthKit.Net), which owns it. After a
+contract change:
+
+```bash
+node scripts/sync-contract.mjs            # from ../AuthKit.Net
+node scripts/sync-contract.mjs --remote   # or from GitHub
+```
+
+Then update `projects/authkit/src/lib/contract/auth.models.ts` in the same change. CI downloads the
+canonical file and fails if the copy drifts.
 
 ## Development
 

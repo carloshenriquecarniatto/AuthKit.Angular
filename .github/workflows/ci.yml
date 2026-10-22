@@ -30,3 +30,10 @@ jobs:
 
       - name: Prettier check
         run: npx prettier --check "projects/**/*.{ts,html,css,json}"
+
+      - name: Contract drift
+        run: |
+          curl --fail --silent --show-error \
+            https://raw.githubusercontent.com/carloshenriquecarniatto/AuthKit.Net/main/contracts/authkit.contract.json \
+            -o /tmp/authkit.contract.json
+          diff -u /tmp/authkit.contract.json contracts/authkit.contract.json

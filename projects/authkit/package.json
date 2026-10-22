@@ -18,8 +18,7 @@
   "peerDependencies": {
     "@angular/common": "^22.0.0",
     "@angular/core": "^22.0.0",
-    "@supabase/supabase-js": "^2.0.0",
-    "@authkit/contracts": "^0.1.0"
+    "@supabase/supabase-js": "^2.0.0"
   },
   "peerDependenciesMeta": {
     "@supabase/supabase-js": {
