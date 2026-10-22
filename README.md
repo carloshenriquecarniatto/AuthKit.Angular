@@ -9,11 +9,11 @@ npm install @authkit/angular
 
 This repository ships the Angular SDK only. The other platforms live in their own repositories:
 
-| Platform | Repository                                                                    |
-| -------- | ----------------------------------------------------------------------------- |
-| .NET     | [AuthKit.Net](https://github.com/carloshenriquecarniatto/AuthKit.Net)         |
-| Aurelia  | [AuthKit.Aurelia](https://github.com/carloshenriquecarniatto/AuthKit.Aurelia) |
-| Contract | [`@authkit/contracts`](https://www.npmjs.com/package/@authkit/contracts)      |
+| Platform | Repository                                                                                                        |
+| -------- | ----------------------------------------------------------------------------------------------------------------- |
+| .NET     | [AuthKit.Net](https://github.com/carloshenriquecarniatto/AuthKit.Net)                                             |
+| Aurelia  | [AuthKit.Aurelia](https://github.com/carloshenriquecarniatto/AuthKit.Aurelia)                                     |
+| Contract | `contracts/authkit.contract.json`, owned by [AuthKit.Net](https://github.com/carloshenriquecarniatto/AuthKit.Net) |
 
 ## Providers
 
