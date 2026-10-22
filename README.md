@@ -9,19 +9,19 @@ npm install @authkit/angular @authkit/contracts
 
 This repository ships the Angular SDK only. The other platforms live in their own repositories:
 
-| Platform | Repository                                                                  |
-| -------- | --------------------------------------------------------------------------- |
-| .NET     | [AuthKit.Net](https://github.com/carloshenriquecarniatto/AuthKit.Net)        |
+| Platform | Repository                                                                    |
+| -------- | ----------------------------------------------------------------------------- |
+| .NET     | [AuthKit.Net](https://github.com/carloshenriquecarniatto/AuthKit.Net)         |
 | Aurelia  | [AuthKit.Aurelia](https://github.com/carloshenriquecarniatto/AuthKit.Aurelia) |
 | Contract | [`@authkit/contracts`](https://www.npmjs.com/package/@authkit/contracts)      |
 
 ## Providers
 
-| Provider   | Package entry point   | Notes                                                              |
-| ---------- | --------------------- | ------------------------------------------------------------------ |
-| Supabase   | `provideAuthKitSupabase` | Email, magic link, OTP (email + phone), recovery, OAuth         |
-| Cl@ve      | `provideAuthKitClave`    | Server-driven eIDAS federation; the browser never holds a token |
-| Any        | `provideAuthKit(provider)` | Bring your own `AuthProvider`                                |
+| Provider | Package entry point        | Notes                                                           |
+| -------- | -------------------------- | --------------------------------------------------------------- |
+| Supabase | `provideAuthKitSupabase`   | Email, magic link, OTP (email + phone), recovery, OAuth         |
+| Cl@ve    | `provideAuthKitClave`      | Server-driven eIDAS federation; the browser never holds a token |
+| Any      | `provideAuthKit(provider)` | Bring your own `AuthProvider`                                   |
 
 ```ts
 bootstrapApplication(AppComponent, {
@@ -68,3 +68,16 @@ backend; the Cl@ve adapter needs a host that maps the federation endpoints (see 
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+## Browser pentest
+
+`security/AuthKit.Pentest.Browser` signs a real user in through the Angular Supabase provider and
+checks what an attacker can take from browser storage. It runs against the throwaway Supabase stack
+from [AuthKit.Net](https://github.com/carloshenriquecarniatto/AuthKit.Net), which the scheduled
+workflow checks out alongside this repository.
+
+```bash
+cd security/AuthKit.Pentest.Browser && npm ci && npx playwright install chromium
+# with the stack running from AuthKit.Net:
+AUTHKIT_PENTEST_URL=http://127.0.0.1:9999 AUTHKIT_PENTEST_ANON_KEY=... node run.mjs
+```
