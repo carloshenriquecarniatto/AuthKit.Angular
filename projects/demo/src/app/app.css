@@ -1,0 +1,67 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f8fafc;
+  color: #0f172a;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+}
+
+.page {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 48px 20px 80px;
+}
+
+.brand {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  letter-spacing: -0.02em;
+}
+
+.brand p {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+}
+
+.hint {
+  margin: 16px 4px;
+  color: #64748b;
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.who {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+.link {
+  background: none;
+  border: none;
+  color: #0f766e;
+  font: inherit;
+  cursor: pointer;
+}

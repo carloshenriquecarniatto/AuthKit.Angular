@@ -1,0 +1,33 @@
+{
+  "name": "@authkit/angular",
+  "version": "0.1.0",
+  "description": "Native Angular authentication components for AuthKit, with Supabase and Cl@ve as providers.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/carloshenriquecarniatto/AuthKit.Angular",
+    "directory": "projects/authkit"
+  },
+  "keywords": [
+    "auth",
+    "authentication",
+    "supabase",
+    "angular",
+    "authkit"
+  ],
+  "peerDependencies": {
+    "@angular/common": "^22.0.0",
+    "@angular/core": "^22.0.0",
+    "@supabase/supabase-js": "^2.0.0",
+    "@authkit/contracts": "^0.1.0"
+  },
+  "peerDependenciesMeta": {
+    "@supabase/supabase-js": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}

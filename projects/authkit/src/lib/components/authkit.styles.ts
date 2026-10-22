@@ -1,0 +1,158 @@
+/**
+ * Base styles shared by every AuthKit component. Components include this string with
+ * ViewEncapsulation.None so consumers get a working form without importing a stylesheet.
+ * Override the --ak-* custom properties to theme it.
+ */
+export const AUTHKIT_STYLES = `
+.ak-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ak-spacing, 16px);
+  background: var(--ak-surface, #fff);
+  color: var(--ak-text, #111827);
+  font-family: var(--ak-font-family, system-ui, sans-serif);
+  width: 100%;
+}
+
+.ak-logo { max-height: 48px; max-width: 180px; object-fit: contain; align-self: center; }
+.ak-field { display: flex; flex-direction: column; gap: 6px; }
+.ak-form form { display: flex; flex-direction: column; gap: var(--ak-spacing, 16px); }
+.ak-field .ak-link { align-self: flex-end; font-size: 0.8rem; }
+.ak-label { font-size: 0.875rem; color: var(--ak-text-muted, #6b7280); }
+
+.ak-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.7rem 0.85rem;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 1px solid var(--ak-border, #d1d5db);
+  border-radius: var(--ak-radius, 8px);
+  outline: none;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.ak-input:focus {
+  border-color: var(--ak-primary, #4f46e5);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ak-primary, #4f46e5) 20%, transparent);
+}
+
+.ak-input[aria-invalid='true'] { border-color: var(--ak-danger, #dc2626); }
+.ak-hint { font-size: 0.8rem; color: var(--ak-danger, #dc2626); }
+.ak-checkbox { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
+
+.ak-button {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font: inherit;
+  font-weight: 600;
+  color: #fff;
+  background: var(--ak-primary, #4f46e5);
+  border: 1px solid transparent;
+  border-radius: var(--ak-radius, 8px);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.ak-button:disabled { opacity: 0.6; cursor: progress; }
+.ak-button-secondary { background: transparent; color: var(--ak-primary, #4f46e5); border-color: var(--ak-border, #d1d5db); }
+
+.ak-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--ak-primary, #4f46e5);
+  cursor: pointer;
+  text-align: center;
+}
+
+.ak-error {
+  padding: 0.7rem 0.85rem;
+  border-radius: var(--ak-radius, 8px);
+  border: 1px solid var(--ak-danger, #dc2626);
+  color: var(--ak-danger, #dc2626);
+  font-size: 0.875rem;
+}
+
+.ak-notice {
+  padding: 0.7rem 0.85rem;
+  border-radius: var(--ak-radius, 8px);
+  border: 1px solid var(--ak-border, #d1d5db);
+  color: var(--ak-text-muted, #6b7280);
+  font-size: 0.875rem;
+}
+
+.ak-socials { display: flex; flex-direction: column; gap: 8px; }
+.ak-socials.ak-inline { flex-direction: row; flex-wrap: wrap; }
+
+.ak-social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.65rem 0.9rem;
+  font: inherit;
+  font-weight: 500;
+  border: 1px solid var(--ak-border, #d1d5db);
+  border-radius: var(--ak-radius, 8px);
+  background: transparent;
+  color: var(--ak-text, #111827);
+  cursor: pointer;
+  flex: 1 1 auto;
+}
+
+.ak-social:disabled { opacity: 0.6; cursor: progress; }
+
+/* Federation (Cl@ve and any other server-driven provider). */
+.ak-federation { gap: calc(var(--ak-spacing, 16px) / 2); }
+.ak-federation-provider { display: flex; flex-direction: column; gap: var(--ak-spacing, 16px); }
+.ak-federation-name { margin: 0; font-size: 1.05rem; font-weight: 600; }
+.ak-federation-description { margin: 0; color: var(--ak-text-muted, #6b7280); font-size: 0.875rem; }
+.ak-federation-icon { max-height: 40px; max-width: 160px; object-fit: contain; align-self: flex-start; }
+.ak-federation-methods { display: flex; flex-direction: column; gap: 8px; }
+
+.ak-federation-method {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  text-align: left;
+  text-decoration: none;
+}
+
+.ak-federation-hint { color: var(--ak-text-muted, #6b7280); font-size: 0.78rem; }
+
+.ak-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: ak-spin 700ms linear infinite;
+}
+
+@keyframes ak-spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ak-spinner { animation-duration: 2s; }
+}
+`;
+
+export const AUTHKIT_UTILITIES = `
+.ak-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+`;
