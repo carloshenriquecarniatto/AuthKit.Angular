@@ -89,6 +89,9 @@ export class AuthKitSocialsComponent {
   @Input() variant: SocialButtonVariant = 'icon-and-text';
   @Input() redirectTo: string | null = null;
 
+  /** Per-instance label overrides; missing keys use the configured catalog. */
+  @Input() labels: Partial<Record<AuthMessageKey, string>> = {};
+
   @Output() readonly oauthRequested = new EventEmitter<string>();
   @Output() readonly failed = new EventEmitter<AuthError | null>();
 
@@ -103,7 +106,8 @@ export class AuthKitSocialsComponent {
   }
 
   t(key: AuthMessageKey, provider?: string): string {
-    return this.options.messages.get(key, provider);
+    const text = this.labels[key] ?? this.options.messages.get(key);
+    return provider ? text.replace('{provider}', provider) : text;
   }
 
   initial(provider: string): string {

@@ -16,7 +16,7 @@ export const AUTHKIT_SKIP = new HttpContextToken<boolean>(() => false);
  * Attaches `Authorization: Bearer <token>` when the current AuthKit session holds one.
  *
  * Rules:
- * - no token, no header: a cookie-based host (Cl@ve) never gets an empty or synthetic header;
+ * - no token, no header: a cookie-based host (OIDC) never gets an empty or synthetic header;
  * - a header the caller already set is preserved, so a host can forward a different token;
  * - `AUTHKIT_SKIP` opts out;
  * - the interceptor does not import `@angular/router` (this entry point stays tree-shakeable).

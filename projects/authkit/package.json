@@ -1,7 +1,7 @@
 {
   "name": "@authkit/angular",
   "version": "0.1.0",
-  "description": "Native Angular authentication components for AuthKit, with Supabase and Cl@ve as providers.",
+  "description": "Native Angular authentication components for AuthKit, with Supabase as the bundled provider.",
   "license": "MIT",
   "repository": {
     "type": "git",

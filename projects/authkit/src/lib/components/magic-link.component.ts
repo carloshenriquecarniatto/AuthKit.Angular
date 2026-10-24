@@ -3,7 +3,9 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   Output,
+  SimpleChanges,
   ViewEncapsulation,
   inject,
   signal,
@@ -62,12 +64,15 @@ import { AUTHKIT_STYLES } from './authkit.styles';
     </div>
   `,
 })
-export class AuthKitMagicLinkComponent {
+export class AuthKitMagicLinkComponent implements OnChanges {
   private readonly provider = inject(AUTH_PROVIDER);
   private readonly options = inject(AUTHKIT_OPTIONS);
 
   @Input() redirectTo: string | null = null;
   @Input() prefilledEmail = '';
+
+  /** Per-instance label overrides; missing keys use the configured catalog. */
+  @Input() labels: Partial<Record<AuthMessageKey, string>> = {};
   @Output() readonly sentLink = new EventEmitter<void>();
   @Output() readonly failed = new EventEmitter<AuthError | null>();
 
@@ -84,8 +89,14 @@ export class AuthKitMagicLinkComponent {
     this.email.set(this.prefilledEmail);
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['prefilledEmail']) {
+      this.email.set(this.prefilledEmail);
+    }
+  }
+
   t(key: AuthMessageKey): string {
-    return this.options.messages.get(key);
+    return this.labels[key] ?? this.options.messages.get(key);
   }
 
   valueOf(event: Event): string {

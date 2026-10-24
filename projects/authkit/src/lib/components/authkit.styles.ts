@@ -108,25 +108,6 @@ export const AUTHKIT_STYLES = `
 
 .ak-social:disabled { opacity: 0.6; cursor: progress; }
 
-/* Federation (Cl@ve and any other server-driven provider). */
-.ak-federation { gap: calc(var(--ak-spacing, 16px) / 2); }
-.ak-federation-provider { display: flex; flex-direction: column; gap: var(--ak-spacing, 16px); }
-.ak-federation-name { margin: 0; font-size: 1.05rem; font-weight: 600; }
-.ak-federation-description { margin: 0; color: var(--ak-text-muted, #6b7280); font-size: 0.875rem; }
-.ak-federation-icon { max-height: 40px; max-width: 160px; object-fit: contain; align-self: flex-start; }
-.ak-federation-methods { display: flex; flex-direction: column; gap: 8px; }
-
-.ak-federation-method {
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 2px;
-  text-align: left;
-  text-decoration: none;
-}
-
-.ak-federation-hint { color: var(--ak-text-muted, #6b7280); font-size: 0.78rem; }
-
 .ak-spinner {
   width: 14px;
   height: 14px;

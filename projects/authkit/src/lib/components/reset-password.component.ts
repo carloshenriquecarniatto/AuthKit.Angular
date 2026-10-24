@@ -3,7 +3,9 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   Output,
+  SimpleChanges,
   ViewEncapsulation,
   inject,
   signal,
@@ -114,12 +116,15 @@ type ResetMode = 'request' | 'update';
     </div>
   `,
 })
-export class AuthKitResetPasswordComponent {
+export class AuthKitResetPasswordComponent implements OnChanges {
   private readonly provider = inject(AUTH_PROVIDER);
   private readonly options = inject(AUTHKIT_OPTIONS);
 
   @Input() redirectTo: string | null = null;
   @Input() prefilledEmail = '';
+
+  /** Per-instance label overrides; missing keys use the configured catalog. */
+  @Input() labels: Partial<Record<AuthMessageKey, string>> = {};
 
   /** Starts directly on the update form, for the page the recovery link lands on. */
   @Input() set updateMode(value: boolean) {
@@ -149,8 +154,14 @@ export class AuthKitResetPasswordComponent {
     this.email.set(this.prefilledEmail);
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['prefilledEmail']) {
+      this.email.set(this.prefilledEmail);
+    }
+  }
+
   t(key: AuthMessageKey): string {
-    return this.options.messages.get(key);
+    return this.labels[key] ?? this.options.messages.get(key);
   }
 
   valueOf(event: Event): string {

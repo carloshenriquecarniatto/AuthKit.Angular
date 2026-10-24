@@ -34,7 +34,7 @@
     "typescript": "~6.0.2",
     "vitest": "^5.0.0"
   },
-  "description": "AuthKit for Angular: provider-agnostic authentication components, the Supabase provider and the Cl@ve server-driven adapter.",
+  "description": "AuthKit for Angular: provider-agnostic authentication components with the Supabase provider.",
   "repository": {
     "type": "git",
     "url": "https://github.com/carloshenriquecarniatto/AuthKit.Angular"

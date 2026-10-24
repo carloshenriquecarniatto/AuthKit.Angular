@@ -17,15 +17,8 @@ export * from './lib/core/auth-kit.service';
 // Supabase provider
 export * from './lib/supabase/supabase-auth.provider';
 
-// Cl@ve (eIDAS) — server-driven federation
-export * from './lib/clave/clave.models';
-export * from './lib/clave/clave-auth.provider';
-export * from './lib/clave/clave.options';
-export * from './lib/clave/clave.component';
-export * from './lib/clave/clave-callback.component';
 
 // Host integration (interceptor and guard are independent entry points at runtime)
-export * from './lib/providers/authkit-providers';
 export * from './lib/host/authkit.interceptor';
 export * from './lib/host/authkit.guard';
 

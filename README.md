@@ -12,7 +12,6 @@ This repository ships the Angular SDK only. The other platforms live in their ow
 | Platform | Repository                                                                                                        |
 | -------- | ----------------------------------------------------------------------------------------------------------------- |
 | .NET     | [AuthKit.Net](https://github.com/carloshenriquecarniatto/AuthKit.Net)                                             |
-| Aurelia  | [AuthKit.Aurelia](https://github.com/carloshenriquecarniatto/AuthKit.Aurelia)                                     |
 | Contract | `contracts/authkit.contract.json`, owned by [AuthKit.Net](https://github.com/carloshenriquecarniatto/AuthKit.Net) |
 
 ## Providers
@@ -20,26 +19,18 @@ This repository ships the Angular SDK only. The other platforms live in their ow
 | Provider | Package entry point        | Notes                                                           |
 | -------- | -------------------------- | --------------------------------------------------------------- |
 | Supabase | `provideAuthKitSupabase`   | Email, magic link, OTP (email + phone), recovery, OAuth         |
-| Cl@ve    | `provideAuthKitClave`      | Server-driven eIDAS federation; the browser never holds a token |
 | Any      | `provideAuthKit(provider)` | Bring your own `AuthProvider`                                   |
 
 ```ts
 bootstrapApplication(AppComponent, {
   providers: [
     provideHttpClient(withInterceptors([authKitInterceptor])),
-    provideAuthKitClave({
-      loginPath: '/clave/login',
-      audience: 'clientes',
-      providers: [claveDescriptor],
+    provideAuthKitSupabase({
+      url: 'https://your-project.supabase.co',
+      anonKey: '...',
     }),
-    provideRouter(routes),
   ],
 });
-```
-
-```html
-<ak-clave [returnUrl]="'/expedientes'" (navigate)="go($event)" />
-<ak-clave-callback (completed)="onCompleted($event)" />
 ```
 
 ## Rules the SDK follows
@@ -47,7 +38,6 @@ bootstrapApplication(AppComponent, {
 - `HttpClient` stays `HttpClient`; the interceptor is an `HttpInterceptorFn`.
 - Guards are `CanActivateFn` and return a `UrlTree`, never call the router.
 - State is signals, not `BehaviorSubject`.
-- Federation UI is descriptor-driven: one control per declared method, no `switch` on a method id.
 - The contract is a committed copy of `contracts/authkit.contract.json`; a parity test and a CI
   drift check fail the build if it diverges from `AuthKit.Net`.
 
@@ -78,7 +68,7 @@ If the checkout path contains `#`, `?` or `%`, `npm test` mirrors the workspace 
 directory before running, because Vite treats `#` as a URL fragment. CI runs in place.
 
 The demo in `projects/demo` is Supabase-only and exists to exercise the components against a real
-backend; the Cl@ve adapter needs a host that maps the federation endpoints (see `AuthKit.Net`).
+backend.
 
 ## License
 

@@ -5,8 +5,7 @@ import {
   type ActivatedRouteSnapshot,
   type RouterStateSnapshot,
 } from '@angular/router';
-import { DEFAULT_AUTH_THEME } from '../contract/auth.models';
-import type { AuthAssuranceLevel, AuthIdentity, AuthSession } from '../contract/auth.models';
+import { DEFAULT_AUTH_THEME, type AuthSession } from '../contract/auth.models';
 import { ENGLISH_AUTH_MESSAGES } from '../contract/auth.messages';
 import {
   AUTH_PROVIDER,
@@ -15,7 +14,7 @@ import {
   type AuthKitOptions,
 } from '../core/auth-kit.options';
 import { FakeAuthProvider, session } from '../testing/fake-auth.provider';
-import { authKitGuard, meetsAssuranceLevel, readRequirement } from './authkit.guard';
+import { authKitGuard, readRequirement } from './authkit.guard';
 
 function options(overrides: Partial<AuthKitOptions> = {}): AuthKitOptions {
   return {
@@ -29,37 +28,19 @@ function options(overrides: Partial<AuthKitOptions> = {}): AuthKitOptions {
   };
 }
 
-function identity(level: AuthAssuranceLevel): AuthIdentity {
-  return {
-    subject: 'opaque-subject',
-    documentType: 'dni',
-    documentId: '12345678Z',
-    documentIdRaw: 'ES/ES/12345678Z',
-    givenName: 'Ada',
-    familyName: 'Lovelace',
-    dateOfBirth: null,
-    level,
-    method: 'clave_movil',
-    tenant: 'caib',
-    representedDocumentId: null,
-    authenticatedAt: new Date().toISOString(),
-  };
-}
-
-function federatedSession(level: AuthAssuranceLevel, audience = 'clientes'): AuthSession {
+function withAudience(audience: string): AuthSession {
   const base = session();
 
   return {
     ...base,
-    user: { ...base.user, identity: identity(level) },
     provider: {
-      ref: `${audience}/clave`,
+      ref: `${audience}/supabase`,
       audience,
-      providerId: 'clave',
-      kind: 'clave',
-      displayName: 'Cl@ve',
-      origin: 'self_hosted',
-      tenant: 'caib',
+      providerId: 'supabase',
+      kind: 'supabase',
+      displayName: 'Supabase',
+      origin: 'cloud',
+      tenant: null,
       capturedAt: new Date().toISOString(),
     },
   };
@@ -96,44 +77,18 @@ describe('authKitGuard', () => {
 
   it('lets an authenticated session through when the route asks for nothing', () => {
     const provider = new FakeAuthProvider();
-    provider.currentSession = federatedSession('substantial');
+    provider.currentSession = session();
     setup(provider);
 
     expect(run()).toBe(true);
   });
 
-  it('returns a UrlTree when the granted level is below the requirement', () => {
-    const provider = new FakeAuthProvider();
-    provider.currentSession = federatedSession('substantial');
-    setup(provider);
-
-    const result = run({ authKit: { loa: 'high' } });
-
-    expect(result instanceof UrlTree).toBe(true);
-  });
-
-  it('lets a high level through a high requirement', () => {
-    const provider = new FakeAuthProvider();
-    provider.currentSession = federatedSession('high');
-    setup(provider);
-
-    expect(run({ authKit: { loa: 'high' } })).toBe(true);
-  });
-
-  it('fails closed when a level is required and the session carries none', () => {
-    const provider = new FakeAuthProvider();
-    provider.currentSession = session();
-    setup(provider);
-
-    expect(run({ authKit: { loa: 'low' } }) instanceof UrlTree).toBe(true);
-  });
-
   it('checks the provider audience', () => {
     const provider = new FakeAuthProvider();
-    provider.currentSession = federatedSession('high', 'clientes');
+    provider.currentSession = withAudience('clients');
     setup(provider);
 
-    expect(run({ authKit: { audience: 'clientes' } })).toBe(true);
+    expect(run({ authKit: { audience: 'clients' } })).toBe(true);
     expect(run({ authKit: { audience: 'intranet' } }) instanceof UrlTree).toBe(true);
   });
 
@@ -142,40 +97,19 @@ describe('authKitGuard', () => {
     provider.currentSession = session();
     setup(provider);
 
-    expect(run({ authKit: { audience: 'clientes' } }) instanceof UrlTree).toBe(true);
+    expect(run({ authKit: { audience: 'clients' } }) instanceof UrlTree).toBe(true);
   });
 
   it('honours the configured login route', () => {
     setup(new FakeAuthProvider(), options({ loginRoute: '/entrar' }));
-    const result = run({ authKit: { loa: 'high' } });
+    const result = run();
 
     expect((result as UrlTree).toString()).toBe('/entrar');
   });
 
-  it('ignores malformed route data instead of granting a level', () => {
-    const provider = new FakeAuthProvider();
-    provider.currentSession = federatedSession('low');
-    setup(provider);
-
-    expect(readRequirement({ authKit: 'high' })).toEqual({ loa: null, audience: null });
-    expect(readRequirement({ authKit: { loa: 'ultra' } })).toEqual({
-      loa: null,
-      audience: null,
-    });
-    expect(readRequirement({})).toEqual({ loa: null, audience: null });
-  });
-});
-
-describe('meetsAssuranceLevel', () => {
-  it('orders low < substantial < high', () => {
-    expect(meetsAssuranceLevel('high', 'substantial')).toBe(true);
-    expect(meetsAssuranceLevel('substantial', 'high')).toBe(false);
-    expect(meetsAssuranceLevel('low', 'low')).toBe(true);
-  });
-
-  it('treats a missing requirement as satisfied and a missing level as a failure', () => {
-    expect(meetsAssuranceLevel(null, null)).toBe(true);
-    expect(meetsAssuranceLevel('low', null)).toBe(true);
-    expect(meetsAssuranceLevel(null, 'low')).toBe(false);
+  it('ignores malformed route data instead of granting access', () => {
+    expect(readRequirement({ authKit: 'clients' })).toEqual({ audience: null });
+    expect(readRequirement({ authKit: { audience: 42 } })).toEqual({ audience: null });
+    expect(readRequirement({})).toEqual({ audience: null });
   });
 });

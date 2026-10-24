@@ -124,8 +124,6 @@ export class SupabaseAuthProvider implements AuthProvider {
       passwordRecovery: true,
       mfa: true,
       socialProviders: this.options.socialProviders ?? [],
-      // Supabase is not a federation provider: descriptors arrive from the registry, not from here.
-      federation: [],
     };
   }
 
@@ -360,8 +358,6 @@ export function mapUser(user: User): AuthUser {
       metadata['username'] ||
       null,
     metadata,
-    // A Supabase user has no legal identity; Cl@ve and other federations populate this field.
-    identity: null,
   };
 }
 
@@ -431,12 +427,6 @@ const MESSAGE_FOR: Record<AuthErrorCode, string> = {
   session_expired: 'Your session has expired. Please sign in again.',
   network_error: 'Could not reach the authentication service. Try again.',
   unknown: 'An unexpected error occurred.',
-  federation_cancelled: 'The sign in was cancelled.',
-  federation_failed: 'The identity provider did not complete the sign in.',
-  loa_not_met: 'The identity provider did not confirm the required assurance level.',
-  certificate_invalid: 'The certificate presented could not be accepted.',
-  identity_not_verified: 'The identity could not be verified.',
-  tenant_mismatch: 'The identity belongs to a different organisation.',
   provider_not_configured: 'That sign-in option is not available.',
   provider_ambiguous: 'Choose which account you want to use.',
   session_conflict: 'You are signed in to incompatible accounts.',

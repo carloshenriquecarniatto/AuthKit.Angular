@@ -21,7 +21,6 @@ export class FakeAuthProvider implements AuthProvider {
     passwordRecovery: true,
     mfa: true,
     socialProviders: ['google', 'github'],
-    federation: [],
   };
 
   signInResult: AuthResult = ok(session());
@@ -128,6 +127,5 @@ export function user(): AuthUser {
     phoneConfirmedAt: null,
     displayName: 'Ada Lovelace',
     metadata: { plan: 'pro' },
-    identity: null,
   };
 }

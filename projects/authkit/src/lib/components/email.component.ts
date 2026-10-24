@@ -3,7 +3,9 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   Output,
+  SimpleChanges,
   ViewEncapsulation,
   inject,
   signal,
@@ -159,13 +161,13 @@ type EmailMode = 'sign-in' | 'sign-up' | 'recover';
             {{ t(mode() === 'sign-up' ? 'signUp' : 'signIn') }}
           </button>
 
-          @if (mode() === 'sign-in') {
+          @if (mode() === 'sign-in' && showForgotPassword) {
             <button class="ak-link" type="button" (click)="startRecovery()">
               {{ t('forgotPassword') }}
             </button>
           }
 
-          @if (capabilities.signUp) {
+          @if (capabilities.signUp && showSignUp) {
             <button class="ak-link" type="button" (click)="toggleMode()">
               {{ t(mode() === 'sign-up' ? 'haveAccount' : 'dontHaveAccount') }}
             </button>
@@ -175,7 +177,7 @@ type EmailMode = 'sign-in' | 'sign-up' | 'recover';
     </div>
   `,
 })
-export class AuthKitEmailComponent {
+export class AuthKitEmailComponent implements OnChanges {
   private readonly provider = inject(AUTH_PROVIDER);
   private readonly options = inject(AUTHKIT_OPTIONS);
 
@@ -190,6 +192,15 @@ export class AuthKitEmailComponent {
 
   /** Overrides the redirect URL configured at bootstrap. */
   @Input() redirectTo: string | null = null;
+
+  /** Hides the "forgot your password?" link on the sign-in form. */
+  @Input() showForgotPassword = true;
+
+  /** Hides the sign-in/sign-up switch even when the provider supports sign-up. */
+  @Input() showSignUp = true;
+
+  /** Per-instance label overrides; missing keys use the configured catalog. */
+  @Input() labels: Partial<Record<AuthMessageKey, string>> = {};
 
   @Output() readonly signInComplete = new EventEmitter<AuthSession>();
   @Output() readonly signUpComplete = new EventEmitter<AuthResult>();
@@ -219,8 +230,18 @@ export class AuthKitEmailComponent {
     this.password.set(this.prefilledPassword);
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['prefilledEmail']) {
+      this.email.set(this.prefilledEmail);
+    }
+
+    if (changes['prefilledPassword']) {
+      this.password.set(this.prefilledPassword);
+    }
+  }
+
   t(key: AuthMessageKey): string {
-    return this.options.messages.get(key);
+    return this.labels[key] ?? this.options.messages.get(key);
   }
 
   valueOf(event: Event): string {

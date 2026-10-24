@@ -16,12 +16,6 @@ export type AuthErrorCode =
   | 'session_expired'
   | 'network_error'
   | 'unknown'
-  | 'federation_cancelled'
-  | 'federation_failed'
-  | 'loa_not_met'
-  | 'certificate_invalid'
-  | 'identity_not_verified'
-  | 'tenant_mismatch'
   | 'provider_not_configured'
   | 'provider_ambiguous'
   | 'session_conflict'
@@ -36,51 +30,8 @@ export type AuthState =
   | 'authenticated'
   | 'error';
 
-export type AuthDocumentType = 'dni' | 'nie' | 'cif' | 'unknown';
 
-/** eIDAS level of assurance, ordered from weakest to strongest. */
-export type AuthAssuranceLevel = 'low' | 'substantial' | 'high';
 
-/** The legal identity behind a session, independent of the protocol that delivered it. */
-export interface AuthIdentity {
-  /** Opaque and stable per (tenant, document). Never the document number. */
-  readonly subject: string;
-  readonly documentType: AuthDocumentType;
-  readonly documentId: string;
-  readonly documentIdRaw: string | null;
-  readonly givenName: string | null;
-  readonly familyName: string | null;
-  /** ISO date, for example `1990-01-31`. */
-  readonly dateOfBirth: string | null;
-  readonly level: AuthAssuranceLevel;
-  /** Authentication method, for example `clave_movil`. */
-  readonly method: string;
-  readonly tenant: string | null;
-  readonly representedDocumentId: string | null;
-  /** ISO-8601 instant. */
-  readonly authenticatedAt: string;
-}
-
-/** One authentication method offered by a federation provider. */
-export interface AuthFederationMethod {
-  readonly id: string;
-  readonly displayName: string;
-  readonly description: string | null;
-  readonly levels: readonly AuthAssuranceLevel[];
-  readonly recommended: boolean;
-}
-
-/** A federation provider as the UI needs it. Rendered from data, never from a switch. */
-export interface AuthFederationProvider {
-  readonly id: string;
-  readonly kind: string;
-  readonly displayName: string;
-  readonly description: string | null;
-  readonly iconUrl: string | null;
-  readonly methods: readonly AuthFederationMethod[];
-  readonly levels: readonly AuthAssuranceLevel[];
-  readonly isPrimary: boolean;
-}
 
 /** Immutable provenance written onto a session at issue time. */
 export interface AuthProviderSnapshot {
@@ -136,7 +87,6 @@ export interface AuthUser {
   readonly phoneConfirmedAt: string | null;
   readonly displayName: string | null;
   readonly metadata: Readonly<Record<string, string>>;
-  readonly identity: AuthIdentity | null;
 }
 
 export interface AuthSession {
@@ -171,7 +121,6 @@ export interface AuthCapabilities {
   readonly passwordRecovery: boolean;
   readonly mfa: boolean;
   readonly socialProviders: readonly string[];
-  readonly federation: readonly AuthFederationProvider[];
 }
 
 export interface AuthTheme {
@@ -204,7 +153,7 @@ export const DEFAULT_AUTH_THEME: AuthTheme = {
 
 /** Runtime description consumed by the contract parity test. */
 export const AUTHKIT_CONTRACT = {
-  contractVersion: '1.1.0',
+  contractVersion: '2.0.0',
   types: {
     AuthUser: [
       'id',
@@ -214,34 +163,8 @@ export const AUTHKIT_CONTRACT = {
       'phoneConfirmedAt',
       'displayName',
       'metadata',
-      'identity',
     ],
     AuthSession: ['accessToken', 'refreshToken', 'expiresAt', 'tokenType', 'user', 'provider'],
-    AuthIdentity: [
-      'subject',
-      'documentType',
-      'documentId',
-      'documentIdRaw',
-      'givenName',
-      'familyName',
-      'dateOfBirth',
-      'level',
-      'method',
-      'tenant',
-      'representedDocumentId',
-      'authenticatedAt',
-    ],
-    AuthFederationMethod: ['id', 'displayName', 'description', 'levels', 'recommended'],
-    AuthFederationProvider: [
-      'id',
-      'kind',
-      'displayName',
-      'description',
-      'iconUrl',
-      'methods',
-      'levels',
-      'isPrimary',
-    ],
     AuthProviderSnapshot: [
       'ref',
       'audience',
@@ -264,7 +187,6 @@ export const AUTHKIT_CONTRACT = {
       'passwordRecovery',
       'mfa',
       'socialProviders',
-      'federation',
     ],
     AuthTheme: [
       'primary',
@@ -293,12 +215,6 @@ export const AUTHKIT_CONTRACT = {
     'session_expired',
     'network_error',
     'unknown',
-    'federation_cancelled',
-    'federation_failed',
-    'loa_not_met',
-    'certificate_invalid',
-    'identity_not_verified',
-    'tenant_mismatch',
     'provider_not_configured',
     'provider_ambiguous',
     'session_conflict',
@@ -359,8 +275,6 @@ export const AUTHKIT_CONTRACT = {
     'completeOAuth',
     'refreshSession',
     'signOut',
-    'beginFederation',
-    'completeFederation',
   ],
 } as const;
 
